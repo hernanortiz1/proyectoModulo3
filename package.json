@@ -1,0 +1,43 @@
+{
+  "name": "proyecto-modulo3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --env-file .env --watch index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hernanortiz1/proyectoModulo3.git"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "mongoose",
+    "jwt",
+    "bcrypt",
+    "rest-api",
+    "backend",
+    "ecommerce",
+    "ropa",
+    "tienda",
+    "control-de-stock",
+    "ropa-hombre",
+    "catalogo"
+  ],
+  "author": "Barrojo Ignacio, Figueroa Lucas, Blanco Juan, Ortiz Hernán",
+  "license": "MIT",
+  "description": "Backend de tienda de ropa masculina",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.18.2",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2"
+  }
+}
