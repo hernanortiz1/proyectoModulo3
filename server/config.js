@@ -18,4 +18,12 @@ export default class Server {
     const __dirname = dirname(fileURLToPath(import.meta.url));
     this.app.use(express.static(`${__dirname}/../public`));
   }
+
+  listen() {
+    this.app.listen(this.port, () => {
+      console.info(
+        `El servidor se esta ejecutando en http://localhost:${this.port}`
+      );
+    });
+  }
 }
