@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const prouctoSchema = new Schema({
+const productoSchema = new Schema({
   nombreProducto: {
     type: String,
     required: true,
@@ -64,8 +64,7 @@ const prouctoSchema = new Schema({
   talle: {
     type: String,
     required: true,
-    minLenght: 1,
-    maxLenght: 5,
+    enum: ["XS", "S", "M", "L", "XL", "XXL", "XXXL", "Unico"],
   },
   color: {
     type: String,
@@ -74,6 +73,6 @@ const prouctoSchema = new Schema({
     maxLenght: 20,
   },
 });
-const Producto = mongoose.model("producto", prouctoSchema);
+const Producto = mongoose.model("producto", productoSchema);
 
 export default Producto;
