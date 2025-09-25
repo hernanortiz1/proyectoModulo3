@@ -4,14 +4,14 @@ export const crearProducto = async (req, res) => {
   try {
     const nuevoProducto = new Producto(req.body);
     await nuevoProducto.save();
-    res.status(201).json(nuevoProducto);
+    res.status(201).json({mensaje: "Producto creado correctamente"});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al crear el producto" });
   }
 };
 
-export const obtenerProductos = async (req, res) => {
+export const obtenerProductos = async (_req, res) => {
   try {
     const productos = await Producto.find();
     res.status(200).json(productos);
