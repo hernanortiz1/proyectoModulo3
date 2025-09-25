@@ -63,7 +63,7 @@ const productoSchema = new Schema({
   talle: {
     type: String,
     required: true,
-    enum: ["XS", "S", "M", "L", "XL", "XXL", "XXXL", "Unico"],
+    enum: ["XS", "S", "M", "L", "XL", "XXL", "XXXL", "Único"],
   },
   color: {
     type: String,
