@@ -43,7 +43,7 @@ export const actualizarProducto = async (req, res) => {
     if (!productoActualizado) {
       return res.status(404).json({ error: "Producto no encontrado" });
     }
-    res.status(200).json(productoActualizado);
+    res.status(200).json({ mensaje: "Producto actualizado correctamente" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al actualizar el producto" });
