@@ -25,7 +25,6 @@ const productoSchema = new Schema({
       "Bermudas",
       "Pantalones",
       "Shorts de Baño",
-      "Zapatillas",
       "Anteojos de sol",
       "Gorras",
     ],
