@@ -28,6 +28,7 @@
   ],
   "author": "Barrojo Ignacio, Figueroa Lucas, Blanco Juan, Ortiz Hernán",
   "license": "MIT",
+  "type": "module",
   "description": "Backend de tienda de ropa masculina",
   "dependencies": {
     "bcrypt": "^6.0.0",
