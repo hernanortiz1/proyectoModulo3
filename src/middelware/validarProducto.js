@@ -31,7 +31,7 @@ const validacionProducto = [
       if (valor >= 100 && valor <= 1000000) {
         return true;
       } else {
-        throw new Error("El precio debe estar entre 50 y 1000000");
+        throw new Error("El precio debe estar entre 100 y 1000000");
       }
     }),
   body("categoria")
@@ -54,8 +54,17 @@ const validacionProducto = [
   body("stock")
     .notEmpty()
     .withMessage("Stock es un dato obligatorio")
-    .isLength({ min: 1, max: 5000 })
-    .withMessage("El stock debe puede tener entre 1 y 500 productos"),
+    .isNumeric()
+    .withMessage("El stock debe ser un numero")
+    .custom((valor) => {
+      if (valor >= 1 && valor <= 5000) {
+        return true;
+      } else {
+        throw new Error(
+          "La cantidad de stock debe tener entre 1 y 5000 productos"
+        );
+      }
+    }),
   body("descripcion")
     .notEmpty()
     .withMessage("La descripcion es obligatoria")
@@ -73,12 +82,17 @@ const validacionProducto = [
       }
       return true;
     }),
+  body("imagen")
+    .notEmpty()
+    .withMessage("El campo imagen es obligatorio")
+    .matches(/\.(jpg|jpeg|png|webp)$/i)
+    .withMessage("La imagen debe ser de tipo jpg, jpeg, png o webp"),
   body("talle")
     .notEmpty()
     .withMessage("El talle es un dato obligatorio")
     .isIn(["XS", "S", "M", "L", "XL", "XXL", "XXXL", "Único"])
     .withMessage(
-      "El talle debe ser una del as siguientes opciones: XS, S, M, L, XL, XXL, XXXL, Unico"
+      "El talle debe ser una de las siguientes opciones: XS, S, M, L, XL, XXL, XXXL, Unico"
     ),
   body("color")
     .notEmpty()
