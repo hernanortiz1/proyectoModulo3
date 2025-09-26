@@ -1,5 +1,5 @@
 import Usuario from "../models/usuario.models.js";
-import bcrypt, { compareSync } from "bcrypt";
+import bcrypt from "bcrypt";
 
 export const crearUsuario = async (req, res) => {
   try {
@@ -28,6 +28,19 @@ export const obtenerUsuarios = async (_req, res) => {
     res.status(500).json({ mensaje: "Error al obtener los usuarios" });
   }
 };
+
+export const obtenerUsuarioPorId = async (req, res) => {
+  try {
+    const buscarUser = await Usuario.findById(req.params.id);
+    if (!buscarUser) {
+      return res.status(404).json({ mensaje: "Usuario no encontrado" });
+    }
+    res.status(200).json(buscarUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al obtener el usuario" });
+  }
+}
 
 export const borrarUsuario = async (req, res) => {
   try {
