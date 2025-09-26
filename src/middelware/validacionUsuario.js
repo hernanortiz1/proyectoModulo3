@@ -51,4 +51,6 @@ const validacionUsuario = [
     }),
 ];
 
+//Aqui me falta agregar el import de resultadoValidacion
+
 export default validacionUsuario;
