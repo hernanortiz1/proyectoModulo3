@@ -1,4 +1,4 @@
-import Usuario from "../models/userName.js";
+import Usuario from "../models/usuario.models.js";
 import bcrypt, { compareSync } from "bcrypt";
 
 export const crearUsuario = async (req, res) => {
