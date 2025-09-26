@@ -17,4 +17,17 @@ const validacionUsuario = [
       }
       throw new Error("Ya existe un usuario con este nombre");
     }),
+  body("password")
+    .notEmpty()
+    .withMessage("La contraseña del usuario es un dato obligatorio")
+    .isLength({ min: 8, max: 16 })
+    .withMessage(
+      "La contraseña del usuario debe tener entre 8 y 16 caracteres"
+    )
+    .matches(
+      /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$/
+    )
+    .withMessage(
+      "La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un caracter no alfanumérico."
+    ),
 ];
