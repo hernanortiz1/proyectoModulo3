@@ -4,6 +4,7 @@ import { actualizarProducto, crearProducto, eliminarProducto, obtenerProductoPor
 const router = Router();
 
 router.route("/").get(obtenerProductos).post(crearProducto)
+router.route("/paginacion").get(productosPaginados)
 router.route("/:id").get(obtenerProductoPorId).delete(eliminarProducto).put(actualizarProducto)
 
 export default router;
