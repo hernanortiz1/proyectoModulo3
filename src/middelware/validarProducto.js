@@ -22,7 +22,35 @@ const validacionProducto = [
         return true;
       throw new Error("Ya existe un producto con ese nombre");
     }),
-
+  body("precio")
+    .notEmpty()
+    .withMessage("El precio es un dato obligatorio")
+    .isNumeric()
+    .withMessage("El precio debe ser un numero")
+    .custom((valor) => {
+      if (valor >= 100 && valor <= 1000000) {
+        return true;
+      } else {
+        throw new Error("El precio debe estar entre 50 y 1000000");
+      }
+    }),
+  body("categoria")
+    .notEmpty()
+    .withMessage("La categoria es un dato obligatorio")
+    .isIn([
+      "Remeras y chombas",
+      "Abrigos y camperas",
+      "Sweaters y buzos",
+      "Camisas",
+      "Bermudas",
+      "Pantalones",
+      "Shorts de Baño",
+      "Anteojos de sol",
+      "Gorras",
+    ])
+    .withMessage(
+      "La categoria debe ser una de las siguientes opciones: Remeras y chombas, Abrigos y camperas, Sweaters y buzos, Camisas, Bermudas, Pantalones, Shorts de Baño, Anteojos de sol, Gorras"
+    ),
 
   (req, res, next) => resultadoValidacion(req, res, next),
 ];
