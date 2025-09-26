@@ -3,12 +3,12 @@ import bcrypt from "bcrypt";
 
 export const crearUsuario = async (req, res) => {
   try {
-    const { password } = req.body;
+    const { password, email, nombreUsuario } = req.body;
     const saltos = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(password, saltos);
     const nuevoUser = new Usuario({
-      nombreUsuario: req.body.nombreUsuario,
-      email: req.body.email,
+      nombreUsuario,
+      email,
       password: passwordHash,
     });
     await nuevoUser.save();
