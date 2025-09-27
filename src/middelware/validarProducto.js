@@ -12,9 +12,7 @@ const validacionProducto = [
       const productoExistente = await Producto.findOne({
         nombreProducto: valor,
       });
-      //No existe ningun producto con el nombre 'valor'
       if (!productoExistente) return true;
-      //verificar si es un PUT, chequear si el id del productoExistente es el mismo que el producto que estoy editando
       if (
         req.params?.id &&
         productoExistente._id.toHexString() === req.params.id
@@ -31,7 +29,7 @@ const validacionProducto = [
       if (valor >= 100 && valor <= 1000000) {
         return true;
       } else {
-        throw new Error("El precio debe estar entre 100 y 1000000");
+        throw new Error("El precio debe estar entre $100 y $1000000");
       }
     }),
   body("categoria")
