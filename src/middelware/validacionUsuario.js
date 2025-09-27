@@ -1,5 +1,6 @@
 import { body } from "express-validator";
 import Usuario from "../models/usuario.models.js";
+import resultadoValidacion from "./resultadoValidacion.js";
 
 const validacionUsuario = [
   body("nombreUsuario")
@@ -49,8 +50,7 @@ const validacionUsuario = [
       }
       throw new Error("Ya existe un usuario con este email");
     }),
+  (req, res, next) => resultadoValidacion(req, res, next),
 ];
-
-//Aqui me falta agregar el import de resultadoValidacion
 
 export default validacionUsuario;
