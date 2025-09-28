@@ -5,6 +5,7 @@ import {
   eliminarProducto,
   obtenerProductoPorId,
   obtenerProductos,
+  productosPaginados,
 } from "../controllers/producto.controllers.js";
 import validacionProducto from "../middelware/validarProducto.js";
 import verificarToken from "../middelware/verificarToken.js";
@@ -15,6 +16,7 @@ router
   .route("/")
   .get(obtenerProductos)
   .post([verificarToken, validacionProducto], crearProducto);
+  router.route("/paginacion").get(productosPaginados)
 router
   .route("/:id")
   .get(obtenerProductoPorId)
