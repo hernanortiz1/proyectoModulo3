@@ -51,10 +51,9 @@ const validacionUsuario = [
       throw new Error("Ya existe un usuario con este email");
     }),
   body("rol")
-    .notEmpty()
-    .withMessage("El rol es obligatorio")
-    .isIn(["Administrador", "Usuario"])
-    .withMessage("El rol debe ser 'Administrador' o 'Usuario'"),
+  .optional()
+  .isIn(["Administrador", "Usuario"])
+  .withMessage("El rol debe ser 'Administrador' o 'Usuario'"),
   (req, res, next) => resultadoValidacion(req, res, next),
 ];
 
