@@ -7,8 +7,8 @@ import {
   obtenerProductos,
   productosPaginados,
 } from "../controllers/producto.controllers.js";
-import validacionProducto from "../middelware/validarProducto.js";
-import verificarToken from "../middelware/verificarToken.js";
+import validacionProducto from "../middlewares/validarProducto.js";
+import verificarToken from "../middlewares/verificarToken.js";
 
 const router = Router();
 
