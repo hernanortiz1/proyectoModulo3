@@ -1,1 +1,1 @@
-//helpers
+import cloudinary from "./cloudinary";
