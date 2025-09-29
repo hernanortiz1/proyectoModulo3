@@ -17,8 +17,11 @@ const router = Router();
 router
   .route("/")
   .get(obtenerProductos)
-  .post([verificarToken, upload.single('imagen'), errorMulter, validacionProducto], crearProducto);
-  router.route("/paginacion").get(productosPaginados)
+  .post(
+    [verificarToken, upload.single("imagen"), errorMulter, validacionProducto],
+    crearProducto
+  );
+router.route("/paginacion").get(productosPaginados);
 router
   .route("/:id")
   .get(obtenerProductoPorId)
