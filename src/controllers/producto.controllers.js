@@ -1,10 +1,25 @@
+import subirImagenACloudinary from "../helpers/cloudinaryUploader.js";
 import Producto from "../models/producto.models.js";
 
 export const crearProducto = async (req, res) => {
   try {
-    const nuevoProducto = new Producto(req.body);
+    let imagenUrl = "";
+    if (req.file) {
+      const resultado = await subirImagenACloudinary(req.file.buffer);
+      console.log(resultado);
+      imagenUrl = resultado.secure_url;
+    } else {
+      imagenUrl = "https://images.pexels.com/photos/33804151/pexels-photo-33804151.jpeg"
+    }
+
+    const nuevoProducto = new Producto({ 
+      ...req.body,
+      imagen: imagenUrl 
+    });
+
     await nuevoProducto.save();
-    res.status(201).json({mensaje: "Producto creado correctamente"});
+
+    res.status(201).json({ mensaje: "Producto creado correctamente" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al crear el producto" });
@@ -63,17 +78,17 @@ export const eliminarProducto = async (req, res) => {
   }
 };
 
-export const productosPaginados = async(req,res)=>{
- try {
-    const page = parseInt(req.query.page) || 1; 
-    const limit = parseInt(req.query.limit) || 10; 
-    const skip = (page - 1) * limit; 
-   
+export const productosPaginados = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
     const [productos, total] = await Promise.all([
       Producto.find().skip(skip).limit(limit),
-      Producto.countDocuments(), 
+      Producto.countDocuments(),
     ]);
-  
+
     res.status(200).json({
       productos,
       total,
@@ -84,4 +99,4 @@ export const productosPaginados = async(req,res)=>{
     console.error(error);
     res.status(500).json({ mensaje: "Error al obtener productos paginados" });
   }
-}
+};

@@ -1,4 +1,4 @@
-import cloudinary from "./cloudinary";
+import cloudinary from "./cloudinary.js";
 
 const subirImagenACloudinary = (buffer) => {
   return new Promise((resolve, reject) => {
