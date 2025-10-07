@@ -22,16 +22,8 @@ const usuarioSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
       minLength: 8,
       maxLength: 100,
-      validate: {
-        validator: (valor) => {
-          return /^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,100}$/.test(
-            valor
-          );
-        },
-      },
     },
     rol: {
       type: String,
