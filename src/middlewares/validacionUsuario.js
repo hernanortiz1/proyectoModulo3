@@ -19,6 +19,7 @@ const validacionUsuario = [
       throw new Error("Ya existe un usuario con este nombre");
     }),
   body("password")
+    .if((value, { req }) => req.method === "POST")
     .notEmpty()
     .withMessage("La contraseña del usuario es un dato obligatorio")
     .isLength({ min: 8, max: 16 })
@@ -51,9 +52,9 @@ const validacionUsuario = [
       throw new Error("Ya existe un usuario con este email");
     }),
   body("rol")
-  .optional()
-  .isIn(["Administrador", "Usuario"])
-  .withMessage("El rol debe ser 'Administrador' o 'Usuario'"),
+    .optional()
+    .isIn(["Administrador", "Usuario"])
+    .withMessage("El rol debe ser 'Administrador' o 'Usuario'"),
   (req, res, next) => resultadoValidacion(req, res, next),
 ];
 
