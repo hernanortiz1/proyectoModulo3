@@ -84,16 +84,36 @@ export const login = async (req, res) => {
 
     const token = await generarJWT(usuario.nombreUsuario, usuario.email);
 
-    res
-      .status(200)
-      .json({
-        mensaje: "Login exitoso",
-        nombreUsuario: usuario.nombreUsuario,
-        token,
-
-      });
+    res.status(200).json({
+      mensaje: "Login exitoso",
+      nombreUsuario: usuario.nombreUsuario,
+      token,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: "Error al iniciar sesión" });
+  }
+};
+
+export const usuariosPaginados = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const [usuarios, total] = await Promise.all([
+      Usuario.find().skip(skip).limit(limit),
+      Usuario.countDocuments(),
+    ]);
+
+    res.status(200).json({
+      usuarios,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al obtener productos paginados" });
   }
 };
