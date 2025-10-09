@@ -9,12 +9,13 @@ export const crearProducto = async (req, res) => {
       console.log(resultado);
       imagenUrl = resultado.secure_url;
     } else {
-      imagenUrl = "https://images.pexels.com/photos/33804151/pexels-photo-33804151.jpeg"
+      imagenUrl =
+        "https://images.pexels.com/photos/33804151/pexels-photo-33804151.jpeg";
     }
 
-    const nuevoProducto = new Producto({ 
+    const nuevoProducto = new Producto({
       ...req.body,
-      imagen: imagenUrl 
+      imagen: imagenUrl,
     });
 
     await nuevoProducto.save();
@@ -82,11 +83,16 @@ export const productosPaginados = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
     const skip = (page - 1) * limit;
 
+    const filtro = search
+      ? { nombreProducto: { $regex: search, $options: "i" } } 
+      : {};
+
     const [productos, total] = await Promise.all([
-      Producto.find().skip(skip).limit(limit),
-      Producto.countDocuments(),
+      Producto.find(filtro).skip(skip).limit(limit),
+      Producto.countDocuments(filtro),
     ]);
 
     res.status(200).json({
