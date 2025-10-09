@@ -99,11 +99,16 @@ export const usuariosPaginados = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+     const search = req.query.search || "";
     const skip = (page - 1) * limit;
 
-    const [usuarios, total] = await Promise.all([
-      Usuario.find().skip(skip).limit(limit),
-      Usuario.countDocuments(),
+    const filtro = search
+      ? { nombreUsuario: { $regex: search, $options: "i" } }
+      : {};
+
+      const [usuarios, total] = await Promise.all([
+      Usuario.find(filtro).skip(skip).limit(limit),
+      Usuario.countDocuments(filtro),
     ]);
 
     res.status(200).json({
