@@ -82,7 +82,7 @@ export const login = async (req, res) => {
       return res.status(401).json({ mensaje: "Credenciales inválidas" });
     }
 
-    const token = await generarJWT(usuario.nombreUsuario, usuario.email);
+    const token = await generarJWT(usuario.nombreUsuario, usuario.email, usuario.rol);
 
     res.status(200).json({
       mensaje: "Login exitoso",
