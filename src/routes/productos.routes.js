@@ -11,21 +11,21 @@ import validacionProducto from "../middlewares/validarProducto.js";
 import verificarToken from "../middlewares/verificarToken.js";
 import upload from "../middlewares/upload.js";
 import errorMulter from "../middlewares/errorMulter.js";
-
+import verificarAdmin from "../middlewares/verificarAdmin.js";
 const router = Router();
 
 router
   .route("/")
   .get(obtenerProductos)
   .post(
-    [verificarToken, upload.single("imagen"), errorMulter, validacionProducto],
+    [verificarToken,verificarAdmin, upload.single("imagen"), errorMulter, validacionProducto],
     crearProducto
   );
 router.route("/paginacion").get(productosPaginados);
 router
   .route("/:id")
   .get(obtenerProductoPorId)
-  .delete(eliminarProducto)
-  .put([verificarToken, validacionProducto], actualizarProducto);
+  .delete([verificarToken,verificarAdmin],eliminarProducto)
+  .put([verificarToken, verificarAdmin,validacionProducto,], actualizarProducto);
 
 export default router;

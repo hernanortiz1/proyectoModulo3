@@ -14,6 +14,7 @@ const verificarToken = (req, res, next) => {
 
     req.nombreUsuario = payload.nombreUsuario;
     req.email = payload.email;
+    req.rol = payload.rol;
     next();
   } catch (error) {
     console.error(error);
