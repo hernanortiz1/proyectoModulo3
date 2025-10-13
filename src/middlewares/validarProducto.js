@@ -80,11 +80,6 @@ const validacionProducto = [
       }
       return true;
     }),
-  body("imagen")
-    .notEmpty()
-    .withMessage("El campo imagen es obligatorio")
-    .matches(/\.(jpg|jpeg|png|webp)$/i)
-    .withMessage("La imagen debe ser de tipo jpg, jpeg, png o webp"),
   body("talle")
     .notEmpty()
     .withMessage("El talle es un dato obligatorio")

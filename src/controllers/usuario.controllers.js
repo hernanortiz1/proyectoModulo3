@@ -82,18 +82,43 @@ export const login = async (req, res) => {
       return res.status(401).json({ mensaje: "Credenciales inválidas" });
     }
 
-    const token = await generarJWT(usuario.nombreUsuario, usuario.email);
+    const token = await generarJWT(usuario.nombreUsuario, usuario.email, usuario.rol);
 
-    res
-      .status(200)
-      .json({
-        mensaje: "Login exitoso",
-        nombreUsuario: usuario.nombreUsuario,
-        token,
-
-      });
+    res.status(200).json({
+      mensaje: "Login exitoso",
+      nombreUsuario: usuario.nombreUsuario,
+      token,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: "Error al iniciar sesión" });
+  }
+};
+
+export const usuariosPaginados = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+     const search = req.query.search || "";
+    const skip = (page - 1) * limit;
+
+    const filtro = search
+      ? { nombreUsuario: { $regex: search, $options: "i" } }
+      : {};
+
+      const [usuarios, total] = await Promise.all([
+      Usuario.find(filtro).skip(skip).limit(limit),
+      Usuario.countDocuments(filtro),
+    ]);
+
+    res.status(200).json({
+      usuarios,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: "Error al obtener productos paginados" });
   }
 };
