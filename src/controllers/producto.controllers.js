@@ -105,4 +105,37 @@ export const productosPaginados = async (req, res) => {
     console.error(error);
     res.status(500).json({ mensaje: "Error al obtener productos paginados" });
   }
+}
+
+export const comprarProducto = async (req, res) => {
+  try {
+    const { cantidad } = req.body;
+    const productoId = req.params.id;
+
+    // Buscar el producto
+    const producto = await Producto.findById(productoId);
+    
+    if (!producto) {
+      return res.status(404).json({ error: "Producto no encontrado" });
+    }
+
+    // Validar stock
+    if (producto.stock < cantidad) {
+      return res.status(400).json({ error: "Stock insuficiente" });
+    }
+
+    // Restar stock
+    producto.stock -= cantidad;
+    
+    // Guardar cambios
+    await producto.save();
+
+    res.status(200).json({ 
+      mensaje: "Compra realizada exitosamente",
+      producto: producto 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error al procesar la compra" });
+  }
 };
