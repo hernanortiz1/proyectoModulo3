@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   actualizarProducto,
+  comprarProducto,
   crearProducto,
   eliminarProducto,
   obtenerProductoPorId,
@@ -22,5 +23,6 @@ router
   .get(obtenerProductoPorId)
   .delete(eliminarProducto)
   .put([verificarToken, validacionProducto], actualizarProducto);
+router.route("/:id/comprar").post(comprarProducto)
 
 export default router;
