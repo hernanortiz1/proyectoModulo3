@@ -54,6 +54,7 @@ const validacionProducto = [
     .withMessage("Stock es un dato obligatorio")
     .isNumeric()
     .withMessage("El stock debe ser un numero")
+    .if((value, { req }) => req.method === "POST")
     .custom((valor) => {
       if (valor >= 1 && valor <= 5000) {
         return true;
