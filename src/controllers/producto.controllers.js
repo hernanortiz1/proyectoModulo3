@@ -6,7 +6,6 @@ export const crearProducto = async (req, res) => {
     let imagenUrl = "";
     if (req.file) {
       const resultado = await subirImagenACloudinary(req.file.buffer);
-      console.log(resultado);
       imagenUrl = resultado.secure_url;
     } else {
       imagenUrl =
