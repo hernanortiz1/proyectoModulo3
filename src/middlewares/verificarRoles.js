@@ -6,7 +6,7 @@ const verificarRoles = (...rolesPermitidos) => {
         mensaje: "No auntenticado"
       });
     }
-    if (!rolesPermitidos.includes(re.rol)){
+    if (!rolesPermitidos.includes(req.rol)){
       return res.status(403).json({
         mensaje: "No tienes permisos para realizar esta acción"
       });
