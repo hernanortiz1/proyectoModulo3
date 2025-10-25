@@ -28,7 +28,7 @@ const usuarioSchema = new Schema(
     },
     rol: {
       type: String,
-      enum: ["Administrador", "Usuario"],
+      enum: ["Administrador", "Usuario","Gerente", "Vendedor"],
       default: "Usuario",
     },
   },
