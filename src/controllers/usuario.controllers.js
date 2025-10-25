@@ -32,6 +32,8 @@ export const crearUsuario = async (req, res) => {
   }
 };
 
+
+
 export const obtenerUsuarios = async (_req, res) => {
   try {
     const usuarios = await Usuario.find();
