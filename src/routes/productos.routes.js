@@ -12,22 +12,34 @@ import validacionProducto from "../middlewares/validarProducto.js";
 import verificarToken from "../middlewares/verificarToken.js";
 import upload from "../middlewares/upload.js";
 import errorMulter from "../middlewares/errorMulter.js";
-import verificarAdmin from "../middlewares/verificarAdmin.js";
+import verificarRoles from "../middlewares/verificarRoles.js";
 const router = Router();
 
 router
   .route("/")
   .get(obtenerProductos)
   .post(
-    [verificarToken,verificarAdmin, upload.single("imagen"), errorMulter, validacionProducto],
+    [
+      verificarToken,
+      verificarRoles("Administrador", "Gerente", "Empleado"),
+      upload.single("imagen"),
+      errorMulter,
+      validacionProducto,
+    ],
     crearProducto
   );
 router.route("/paginacion").get(productosPaginados);
 router
   .route("/:id")
   .get(obtenerProductoPorId)
-  .delete([verificarToken,verificarAdmin],eliminarProducto)
-  .put([verificarToken, verificarAdmin,validacionProducto,], actualizarProducto);
-router.route("/:id/comprar").post(comprarProducto)
+  .delete(
+    [verificarToken, verificarRoles("Administrador", "Gerente", "Empleado")],
+    eliminarProducto
+  )
+  .put(
+    [verificarToken, verificarRoles("Administrador", "Gerente", "Empleado"), validacionProducto],
+    actualizarProducto
+  );
+router.route("/:id/comprar").post(comprarProducto);
 
 export default router;
