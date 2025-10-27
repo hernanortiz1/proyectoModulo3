@@ -53,8 +53,8 @@ const validacionUsuario = [
     }),
   body("rol")
     .optional()
-    .isIn(["Administrador", "Usuario", "Vendedor", "Gerente"])
-    .withMessage("El rol debe ser 'Administrador', 'Usuario', 'Vendedor' o 'Gerente'"),
+    .isIn(["Administrador", "Usuario", "Empleado", "Gerente"])
+    .withMessage("El rol debe ser 'Administrador', 'Usuario', 'Empleado' o 'Gerente'"),
   (req, res, next) => resultadoValidacion(req, res, next),
 ];
 
