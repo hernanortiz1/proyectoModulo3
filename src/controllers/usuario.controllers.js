@@ -5,13 +5,24 @@ import generarJWT from "../helpers/generarJWT.js";
 export const crearUsuario = async (req, res) => {
   try {
     const { password, email, nombreUsuario, rol } = req.body;
+
+    if (rol && rol !== "Usuario") {
+      if (!req.rol || req.rol !== "Administrador") {
+        return res
+          .status(403)
+          .json({
+            mensaje:
+              "Solo el administrador puede crear usuarios con roles especiales",
+          });
+      }
+    }
     const saltos = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(password, saltos);
     const nuevoUser = new Usuario({
       nombreUsuario,
       email,
       password: passwordHash,
-      rol,
+      rol: rol || "Usuario",
     });
     await nuevoUser.save();
     res.status(201).json({ mensaje: "El usuario fue creado exitosamente" });
@@ -20,6 +31,8 @@ export const crearUsuario = async (req, res) => {
     res.status(500).json({ mensaje: "Error al crear usuario" });
   }
 };
+
+
 
 export const obtenerUsuarios = async (_req, res) => {
   try {
@@ -50,6 +63,15 @@ export const borrarUsuario = async (req, res) => {
     if (!eliminarUser) {
       return res.status(404).json({ mensaje: "Usuario no encontrado" });
     }
+
+    if (eliminarUser.rol === "Administrador") {
+      return res
+        .status(403)
+        .json({
+          mensaje: "No se puede eliminar un usuario con rol de Administrador",
+        });
+    }
+
     res.status(200).json({ mensaje: "Usuario eliminado exitosamente" });
   } catch (error) {
     console.error(error);
@@ -82,7 +104,11 @@ export const login = async (req, res) => {
       return res.status(401).json({ mensaje: "Credenciales inválidas" });
     }
 
-    const token = await generarJWT(usuario.nombreUsuario, usuario.email, usuario.rol);
+    const token = await generarJWT(
+      usuario.nombreUsuario,
+      usuario.email,
+      usuario.rol
+    );
 
     res.status(200).json({
       mensaje: "Login exitoso",
@@ -99,14 +125,14 @@ export const usuariosPaginados = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
-     const search = req.query.search || "";
+    const search = req.query.search || "";
     const skip = (page - 1) * limit;
 
     const filtro = search
       ? { nombreUsuario: { $regex: search, $options: "i" } }
       : {};
 
-      const [usuarios, total] = await Promise.all([
+    const [usuarios, total] = await Promise.all([
       Usuario.find(filtro).skip(skip).limit(limit),
       Usuario.countDocuments(filtro),
     ]);
