@@ -21,7 +21,7 @@ router
   .post(
     [
       verificarToken,
-      verificarRoles("Administrador", "Gerente", "Vendedor"),
+      verificarRoles("Administrador", "Gerente", "Empleado"),
       upload.single("imagen"),
       errorMulter,
       validacionProducto,
@@ -33,11 +33,11 @@ router
   .route("/:id")
   .get(obtenerProductoPorId)
   .delete(
-    [verificarToken, verificarRoles("Administrador", "Gerente", "Vendedor")],
+    [verificarToken, verificarRoles("Administrador", "Gerente", "Empleado")],
     eliminarProducto
   )
   .put(
-    [verificarToken, verificarRoles("Administrador", "Gerente", "Vendedor"), validacionProducto],
+    [verificarToken, verificarRoles("Administrador", "Gerente", "Empleado"), validacionProducto],
     actualizarProducto
   );
 router.route("/:id/comprar").post(comprarProducto);
