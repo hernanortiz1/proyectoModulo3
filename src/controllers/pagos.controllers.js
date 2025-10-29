@@ -65,19 +65,11 @@ export const crearOrdenCarrito = async (req, res) => {
     const preference = {
       items: itemsParaMP,
       back_urls: {
-        success: `${
-          process.env.FRONTEND_URL || "https://tiendalannister1.netlify.app"
-        }/pago/exitoso`,
-        failure: `${
-          process.env.FRONTEND_URL || "https://tiendalannister1.netlify.app"
-        }/pago/fallido`,
-        pending: `${
-          process.env.FRONTEND_URL || "https://tiendalannister1.netlify.app"
-        }/pago/pendiente`,
+        success: `${process.env.FRONTEND_URL}/pago/exitoso`,
+        failure: `${process.env.FRONTEND_URL}/pago/fallido`,
+        pending: `${process.env.FRONTEND_URL}/pago/pendiente`,
       },
-      notification_url: `${
-        process.env.BACKEND_URL || "https://back-tienda-lannister.vercel.app"
-      }/api/pagos/webhook`,
+      notification_url: `${process.env.BACKEND_URL}/api/pagos/webhook`,
       external_reference: nuevoPedido._id.toString(),
     };
 
