@@ -68,21 +68,25 @@ export const crearOrdenCarrito = async (req, res) => {
       notification: `${process.env.BACKEND_URL}/api/pagos/webhook`,
     });
 
-    // Y verifica las variables
-    console.log("Variables de entorno:", {
-      FRONTEND_URL: process.env.FRONTEND_URL,
-      BACKEND_URL: process.env.BACKEND_URL,
-    });
+    if (!process.env.FRONTEND_URL || !process.env.BACKEND_URL) {
+      console.error("❌ Variables de entorno faltantes:", {
+        FRONTEND_URL: process.env.FRONTEND_URL,
+        BACKEND_URL: process.env.BACKEND_URL,
+      });
+      return res.status(500).json({
+        mensaje: "Error de configuración del servidor",
+      });
+    }
 
     // Configurar preference con webhook
     const preference = {
       items: itemsParaMP,
       back_urls: {
-        success: `https://tiendalannister1.netlify.app/pago/exitoso`,
-        failure: `https://tiendalannister1.netlify.app/pago/fallido`,
-        pending: `https://tiendalannister1.netlify.app/pago/pendiente`,
+        success: `${process.env.FRONTEND_URL}/pago/exitoso`,
+        failure: `${process.env.FRONTEND_URL}/pago/fallido`,
+        pending: `${process.env.FRONTEND_URL}/pago/pendiente`,
       },
-      notification_url: `https://back-tienda-lannister.vercel.app/api/pagos/webhook`,
+      notification_url: `${process.env.BACKEND_URL}/api/pagos/webhook`,
       external_reference: nuevoPedido._id.toString(),
     };
 
