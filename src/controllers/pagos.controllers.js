@@ -106,6 +106,72 @@ export const crearOrdenCarrito = async (req, res) => {
   }
 };
 
+export const crearOrdenIndividual = async (req, res) => {
+  try {
+    const { productoId, cantidad } = req.body;
+
+    if (!productoId || !cantidad) {
+      return res.status(400).json({ mensaje: "Datos del producto incompletos" });
+    }
+
+    // Buscar el producto en la base de datos
+    const productoDB = await Producto.findById(productoId);
+
+    if (!productoDB) {
+      return res.status(404).json({ mensaje: "Producto no encontrado" });
+    }
+
+    // Validar stock
+    if (productoDB.stock < cantidad) {
+      return res.status(400).json({
+        mensaje: `Stock insuficiente para ${productoDB.nombreProducto}. Disponible: ${productoDB.stock}, Solicitado: ${cantidad}`,
+      });
+    }
+
+    // Crear el pedido con estado Pendiente
+    const nuevoPedido = new Pedido({
+      productos: [{
+        producto: productoDB._id,
+        cantidad: cantidad
+      }],
+      total: productoDB.precio * cantidad,
+      estado: "Pendiente",
+    });
+    await nuevoPedido.save();
+
+    // Configurar preference para MercadoPago
+    const preference = {
+      items: [{
+        title: productoDB.nombreProducto,
+        quantity: cantidad,
+        currency_id: "ARS",
+        unit_price: productoDB.precio,
+      }],
+      back_urls: {
+        success: `${process.env.FRONTEND_URL}/pago/exitoso`,
+        failure: `${process.env.FRONTEND_URL}/pago/fallido`,
+        pending: `${process.env.FRONTEND_URL}/pago/pendiente`,
+      },
+      notification_url: `${process.env.BACKEND_URL}/api/pagos/webhook`,
+      external_reference: nuevoPedido._id.toString(),
+    };
+
+    const preferenceClient = new Preference(client);
+    const respuesta = await preferenceClient.create({ body: preference });
+
+    res.status(201).json({
+      init_point: respuesta.init_point,
+      pedidoId: nuevoPedido._id,
+    });
+  } catch (error) {
+    console.error("Error al crear la orden individual:", error);
+    res.status(500).json({
+      mensaje: "Ocurrió un error al procesar el pago",
+      error: error.message,
+    });
+  }
+};
+
 export const recibirWebhook = async (req, res) => {
   const notification = req.body;
   console.log("🔔 Webhook recibido:", JSON.stringify(notification, null, 2));
