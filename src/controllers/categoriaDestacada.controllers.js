@@ -1,4 +1,4 @@
-import CategoriaDestacada from "../models/categoriaDestacada.models";
+import CategoriaDestacada from "../models/categoriaDestacada.models.js";
 
 export const obtenerConfiguracion = async (req, res) => {
   try {
