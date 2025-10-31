@@ -40,6 +40,5 @@ router
     [verificarToken, verificarRoles("Administrador", "Gerente", "Empleado"), validacionProducto],
     actualizarProducto
   );
-router.route("/:id/comprar").post(comprarProducto);
 
 export default router;
