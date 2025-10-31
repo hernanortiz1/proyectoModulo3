@@ -232,7 +232,6 @@ export const recibirWebhook = async (req, res) => {
   }
 };
 
-// Endpoint para verificar estado del pedido manualmente (útil para el frontend)
 export const verificarEstadoPedido = async (req, res) => {
   try {
     const { pedidoId } = req.params;
