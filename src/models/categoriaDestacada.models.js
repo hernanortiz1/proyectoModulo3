@@ -4,6 +4,8 @@ const categoriaDestacadaSchema = new mongoose.Schema({
   titulo: {
     type: String,
     required: true,
+    minLength: 3,
+    maxLength: 100,
     trim: true,
   },
   categoriasSeleccionadas: {
@@ -12,5 +14,8 @@ const categoriaDestacadaSchema = new mongoose.Schema({
   },
 });
 
-const CategoriaDestacada = mongoose.model("CategoriaDestacada", categoriaDestacadaSchema);
+const CategoriaDestacada = mongoose.model(
+  "CategoriaDestacada",
+  categoriaDestacadaSchema
+);
 export default CategoriaDestacada;
