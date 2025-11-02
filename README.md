@@ -1,6 +1,6 @@
 # 🧾 Backend - Tienda de Ropa / Control de Stock 👕👟
 
-Este proyecto corresponde al **backend del sistema de gestión y catálogo de Lannister tienda de ropa**, el cual permite administrar **productos** y **usuarios** con autenticación segura y validaciones completas. Además, ahora cuenta con **integración con Mercado Pago** para la gestión de pagos.
+Este proyecto corresponde al **backend del sistema de gestión y catálogo de Lannister tienda de ropa**, el cual permite administrar **productos** y **usuarios** con autenticación segura y validaciones completas. Además, cuenta con **integración con Mercado Pago** para la gestión de pagos.
 
 ---
 
