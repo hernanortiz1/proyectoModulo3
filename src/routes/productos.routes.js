@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
   actualizarProducto,
-  comprarProducto,
   crearProducto,
   eliminarProducto,
   obtenerProductoPorId,
