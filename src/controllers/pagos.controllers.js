@@ -61,23 +61,6 @@ export const crearOrdenCarrito = async (req, res) => {
     });
     await nuevoPedido.save();
 
-    console.log("URLs que se envían a MP:", {
-      success: `${process.env.FRONTEND_URL}/pago/exitoso`,
-      failure: `${process.env.FRONTEND_URL}/pago/fallido`,
-      pending: `${process.env.FRONTEND_URL}/pago/pendiente`,
-      notification: `${process.env.BACKEND_URL}/api/pagos/webhook`,
-    });
-
-    if (!process.env.FRONTEND_URL || !process.env.BACKEND_URL) {
-      console.error("❌ Variables de entorno faltantes:", {
-        FRONTEND_URL: process.env.FRONTEND_URL,
-        BACKEND_URL: process.env.BACKEND_URL,
-      });
-      return res.status(500).json({
-        mensaje: "Error de configuración del servidor",
-      });
-    }
-
     // Configurar preference con webhook
     const preference = {
       items: itemsParaMP,
@@ -174,28 +157,20 @@ export const crearOrdenIndividual = async (req, res) => {
 
 export const recibirWebhook = async (req, res) => {
   const notification = req.body;
-  console.log("🔔 Webhook recibido:", JSON.stringify(notification, null, 2));
-  // ✅ ESTE LOG DEBE APARECER CUANDO HAY UN PAGO
-  console.log("🎯 ¿WEBHOOK RECIBIDO?", new Date().toISOString());
-  console.log("Body recibido:", req.body);
 
   try {
     if (notification.type === "payment") {
       const paymentClient = new Payment(client);
       const payment = await paymentClient.get({ id: notification.data.id });
 
-      console.log(`💰 Estado del pago ${payment.id}: ${payment.status}`);
-
       if (payment && payment.status === "approved") {
         const pedidoId = payment.external_reference;
-        console.log(`🎯 Procesando pedido: ${pedidoId}`);
 
         const pedido = await Pedido.findById(pedidoId).populate(
           "productos.producto"
         );
 
         if (!pedido) {
-          console.error(`❌ Pedido ${pedidoId} no encontrado`);
           return res.sendStatus(404);
         }
 
@@ -209,19 +184,9 @@ export const recibirWebhook = async (req, res) => {
             await Producto.findByIdAndUpdate(item.producto._id, {
               $inc: { stock: -item.cantidad },
             });
-            console.log(
-              `📦 Stock actualizado: ${item.producto.nombreProducto} -${item.cantidad} unidades`
-            );
           }
 
           await pedido.save();
-          console.log(
-            `✅ Pedido ${pedidoId} actualizado a Aprobado y stock descontado`
-          );
-        } else {
-          console.log(
-            `ℹ️ Pedido ${pedidoId} ya procesado. Estado: ${pedido.estado}`
-          );
         }
       } else if (
         payment &&
@@ -234,14 +199,14 @@ export const recibirWebhook = async (req, res) => {
         if (pedido && pedido.estado === "Pendiente") {
           pedido.estado = "Rechazado";
           await pedido.save();
-          console.log(`❌ Pedido ${pedidoId} marcado como Rechazado`);
+          console.info(`Pedido ${pedidoId} marcado como Rechazado`);
         }
       }
     }
 
     res.sendStatus(200);
   } catch (error) {
-    console.error(`💥 Error procesando webhook:`, error);
+    console.error(`Error procesando webhook:`, error);
     res.status(500).json({
       mensaje: "Error interno del servidor al procesar el webhook",
       error: error.message,
@@ -249,7 +214,6 @@ export const recibirWebhook = async (req, res) => {
   }
 };
 
-// Endpoint para verificar estado del pedido manualmente (útil para el frontend)
 export const verificarEstadoPedido = async (req, res) => {
   try {
     const { pedidoId } = req.params;
