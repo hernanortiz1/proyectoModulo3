@@ -51,9 +51,15 @@ export const obtenerProductoPorId = async (req, res) => {
 
 export const actualizarProducto = async (req, res) => {
   try {
+    let dataActualizada = { ...req.body };
+    if (req.file) {
+      const resultado = await subirImagenACloudinary(req.file.buffer);
+      dataActualizada.imagen = resultado.secure_url;
+    }
     const productoActualizado = await Producto.findByIdAndUpdate(
       req.params.id,
-      req.body
+      dataActualizada,
+      { new: true, runValidators: true }
     );
     if (!productoActualizado) {
       return res.status(404).json({ error: "Producto no encontrado" });
@@ -86,7 +92,7 @@ export const productosPaginados = async (req, res) => {
     const skip = (page - 1) * limit;
 
     const filtro = search
-      ? { nombreProducto: { $regex: search, $options: "i" } } 
+      ? { nombreProducto: { $regex: search, $options: "i" } }
       : {};
 
     const [productos, total] = await Promise.all([
@@ -104,4 +110,4 @@ export const productosPaginados = async (req, res) => {
     console.error(error);
     res.status(500).json({ mensaje: "Error al obtener productos paginados" });
   }
-}
+};
