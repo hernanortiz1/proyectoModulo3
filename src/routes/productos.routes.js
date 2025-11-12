@@ -1,7 +1,6 @@
 import { Router } from "express";
 import {
   actualizarProducto,
-  comprarProducto,
   crearProducto,
   eliminarProducto,
   obtenerProductoPorId,
@@ -37,7 +36,13 @@ router
     eliminarProducto
   )
   .put(
-    [verificarToken, verificarRoles("Administrador", "Gerente", "Empleado"), validacionProducto],
+    [
+      verificarToken,
+      verificarRoles("Administrador", "Gerente", "Empleado"),
+      upload.single("imagen"),
+      errorMulter,
+      validacionProducto,
+    ],
     actualizarProducto
   );
 
